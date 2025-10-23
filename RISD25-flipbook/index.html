@@ -37,28 +37,53 @@
       height: 100%;
       display: block;
     }
+
+    /* Add responsive styles */
+    @media (max-width: 900px) {
+      #flipbook {
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    .nav-buttons {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .nav-buttons button {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .nav-buttons button:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
   </style>
 </head>
 <body>
 
   <div id="flipbook">
+    <!-- Pages go here -->
     <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_001.jpg" alt="Page 1"></div>
     <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_002.jpg" alt="Page 2"></div>
     <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_003.jpg" alt="Page 3"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_004.jpg" alt="Page 4"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_005.jpg" alt="Page 5"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_006.jpg" alt="Page 6"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_007.jpg" alt="Page 7"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_008.jpg" alt="Page 8"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_009.jpg" alt="Page 9"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_010.jpg" alt="Page 10"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_011.jpg" alt="Page 11"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_012.jpg" alt="Page 12"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_013.jpg" alt="Page 13"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_014.jpg" alt="Page 14"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_015.jpg" alt="Page 15"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_016.jpg" alt="Page 16"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_017.jpg" alt="Page 17"></div>
+    <!-- Add more pages as necessary -->
+  </div>
+
+  <!-- Navigation buttons -->
+  <div class="nav-buttons">
+    <button id="prev">Previous</button>
+    <button id="next">Next</button>
   </div>
 
   <script>
@@ -71,6 +96,20 @@
           autoCenter: true
         });
       }
+
+      // Check if Turn.js is loaded successfully
+      if (typeof $.fn.turn === "undefined") {
+        alert("Turn.js is not loaded properly.");
+      }
+
+      // Navigation button functionality
+      $('#prev').click(function() {
+        flipbook.turn('previous');
+      });
+
+      $('#next').click(function() {
+        flipbook.turn('next');
+      });
     });
   </script>
 
