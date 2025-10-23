@@ -8,34 +8,34 @@
   <!-- Load jQuery first -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Load Turn.js from your uploaded file -->
+  <!-- Load Turn.js -->
   <script src="https://cyyong-flip.github.io/RISD25-flipbook/assets/js/turn.min.js"></script>
 
   <style>
     body {
       background: #f7f7f7;
       font-family: 'Roboto', sans-serif;
-      text-align: center;
       margin: 0;
       padding: 0;
       overflow: hidden;
     }
 
-    /* Container for flipbook */
+    /* Flipbook container */
     #flipbook {
-      width: 80%;
-      max-width: 1200px;
-      height: 600px;
-      margin: 50px auto;
+      width: 100%;
+      height: 100vh; /* Fill the viewport height */
+      margin: 0 auto;
       background-color: #fff;
       position: relative;
       border-radius: 15px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
       overflow: hidden;
       display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* Page styles */
+    /* Page styling */
     #flipbook .page {
       width: 100%;
       height: 100%;
@@ -47,26 +47,19 @@
     img {
       width: 100%;
       height: 100%;
-      border-radius: 10px;
-      object-fit: cover;
+      object-fit: cover; /* Ensure the image covers the page, but it may crop */
     }
 
-    /* Cover page special styling */
-    .cover-page {
-      border: 5px solid #333;
-    }
-
-    /* Thumbnails navigation (vertical on left) */
+    /* Thumbnails navigation (left side, vertical) */
     .thumbnail-nav {
-      position: absolute;
+      position: fixed;
       top: 50%;
-      left: 0;
+      left: 10px;
       transform: translateY(-50%);
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      padding-right: 10px;
       z-index: 10;
     }
 
@@ -86,9 +79,9 @@
 
     /* Navigation buttons styling */
     .nav-buttons {
-      position: absolute;
+      position: fixed;
       top: 50%;
-      right: 0;
+      right: 10px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -115,7 +108,7 @@
       outline: none;
     }
 
-    /* Preloader */
+    /* Preloader styling */
     #preloader {
       position: fixed;
       top: 0;
@@ -131,6 +124,7 @@
     #preloader img {
       width: 50px;
     }
+
   </style>
 </head>
 <body>
@@ -142,32 +136,13 @@
 
   <!-- Flipbook Container -->
   <div id="flipbook">
-    <!-- Cover page -->
+    <!-- Cover page (this page is not part of the flipbook initially) -->
     <div class="page cover-page">
       <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_001.jpg" alt="Cover Page">
     </div>
-    <!-- Pages 2-17 -->
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_002.jpg" alt="Page 2"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_003.jpg" alt="Page 3"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_004.jpg" alt="Page 4"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_005.jpg" alt="Page 5"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_006.jpg" alt="Page 6"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_007.jpg" alt="Page 7"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_008.jpg" alt="Page 8"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_009.jpg" alt="Page 9"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_010.jpg" alt="Page 10"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_011.jpg" alt="Page 11"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_012.jpg" alt="Page 12"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_013.jpg" alt="Page 13"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_014.jpg" alt="Page 14"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_015.jpg" alt="Page 15"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_016.jpg" alt="Page 16"></div>
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_017.jpg" alt="Page 17"></div>
-    <!-- Page 18 -->
-    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_018.jpg" alt="Page 18"></div>
   </div>
 
-  <!-- Thumbnails navigation (vertical on left) -->
+  <!-- Thumbnails navigation -->
   <div class="thumbnail-nav">
     <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_001.jpg" alt="Thumbnail 1">
     <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_002.jpg" alt="Thumbnail 2">
@@ -186,7 +161,6 @@
     <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_015.jpg" alt="Thumbnail 15">
     <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_016.jpg" alt="Thumbnail 16">
     <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_017.jpg" alt="Thumbnail 17">
-    <!-- New Thumbnail for Page 18 -->
     <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_018.jpg" alt="Thumbnail 18">
   </div>
 
@@ -201,12 +175,12 @@
       const flipbook = $('#flipbook');
       const preloader = $('#preloader');
 
-      // Show preloader while images are loading
-      $(flipbook).turn({
+      // Initialize the flipbook with the cover page only
+      flipbook.turn({
         width: '100%',
-        height: 600,
+        height: '100vh',
         autoCenter: true,
-        display: 'double',
+        display: 'single',
         gradients: true,
         when: {
           turning: function(event, page, view) {
@@ -218,18 +192,21 @@
         }
       });
 
+      // Show the first page after clicking "Next"
+      $('#next').click(function() {
+        flipbook.turn('page', 2); // Go to the first actual page (page 2)
+        $(this).hide(); // Hide the "Next" button after the first transition
+        $('#prev').show(); // Show the "Previous" button
+      });
+
       // Navigation buttons functionality
       $('#prev').click(function() {
         flipbook.turn('previous');
       });
 
-      $('#next').click(function() {
-        flipbook.turn('next');
-      });
-
       // Thumbnail navigation
       $('.thumbnail-nav img').click(function() {
-        var pageIndex = $(this).index() + 1;
+        var pageIndex = $(this).index() + 2; // Thumbnails start from page 2
         flipbook.turn('page', pageIndex);
       });
     });
