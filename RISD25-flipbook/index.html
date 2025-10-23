@@ -4,7 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RISD25-flipbook</title>
+
+  <!-- Load jQuery first -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <!-- Load Turn.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+
   <style>
     body {
       background: #f7f7f7;
@@ -57,7 +63,6 @@
 
   <script>
     window.onload = function () {
-      // Ensure the flipbook is initialized properly
       const flipbook = document.getElementById('flipbook');
       if (flipbook) {
         $(flipbook).turn({
