@@ -25,18 +25,28 @@
 
     /* Flipbook container */
     #flipbook {
-      width: 800px; /* 400px per page × 2 */
+      width: 800px;
       height: 520px;
       background: #fff;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
       border-radius: 10px;
       overflow: hidden;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: all 0.8s ease;
+    }
+
+    #flipbook.loaded {
+      opacity: 1;
+      transform: scale(1);
     }
 
     #flipbook .page {
       background: #fff;
       width: 400px;
       height: 520px;
+      position: relative;
+      overflow: hidden;
     }
 
     #flipbook img {
@@ -44,6 +54,23 @@
       height: 520px;
       object-fit: cover;
       display: block;
+    }
+
+    /* --- (2) Hover corner hint --- */
+    #flipbook .page::after {
+      content: "";
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle at bottom right, rgba(0,0,0,0.15), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    #flipbook .page:hover::after {
+      opacity: 1;
     }
 
     /* Navigation buttons */
@@ -104,17 +131,95 @@
       width: 60px;
     }
 
+    /* Download button */
+    #downloadBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+      z-index: 20;
+    }
+
+    #downloadBtn:hover {
+      background-color: #0056b3;
+    }
+
+    /* --- (4) Page flip glow animation --- */
+    @keyframes pageGlow {
+      0% { box-shadow: 0 0 0 rgba(0,0,0,0); }
+      50% { box-shadow: 0 0 40px rgba(0,123,255,0.3); }
+      100% { box-shadow: 0 0 0 rgba(0,0,0,0); }
+    }
+    #flipbook.turning {
+      animation: pageGlow 1s ease;
+    }
+
+    /* --- (5) Thumbnail Navigator --- */
+    #thumbnails {
+      position: fixed;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      max-width: 90%;
+      padding: 10px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      z-index: 15;
+    }
+    #thumbnails img {
+      width: 50px;
+      height: 70px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    #thumbnails img:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 5px rgba(0,0,0,0.4);
+    }
+
+    /* --- (7) Lightbox zoom --- */
+    #lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+      cursor: zoom-out;
+    }
+    #lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
     @media (max-width: 850px) {
       #flipbook {
         width: 400px;
         height: 520px;
       }
-
       #flipbook .page {
         width: 400px;
         height: 520px;
       }
-
       #flipbook img {
         width: 400px;
         height: 520px;
@@ -127,6 +232,9 @@
   <div id="preloader">
     <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..." />
   </div>
+
+  <!-- Download Button -->
+  <button id="downloadBtn">⬇ Download Flipbook</button>
 
   <!-- Flipbook -->
   <div id="flipbook">
@@ -159,6 +267,9 @@
   <!-- Page Number -->
   <div id="pageNumber">Page 1–2 of 18</div>
 
+  <!-- (5) Thumbnails -->
+  <div id="thumbnails"></div>
+
   <script>
     $(document).ready(function() {
       const flipbook = $('#flipbook');
@@ -181,20 +292,21 @@
         gradients: true,
         when: {
           turning: function() {
+            flipbook.addClass('turning');
             preloader.show();
           },
           turned: function(event, page) {
             preloader.hide();
+            flipbook.removeClass('turning');
 
             const isDouble = flipbook.turn('display') === 'double';
             const startPage = isDouble ? page : page;
             const endPage = isDouble ? page + 1 : page;
             pageNumber.text(`Page ${startPage}${isDouble && endPage <= totalPages ? '–' + endPage : ''} of ${totalPages}`);
 
-            // Button logic
             if (page === 1) {
-              $('#prev').hide(); // hide left button
-              $('#next').show().css('visibility', 'visible'); // only show right button
+              $('#prev').hide();
+              $('#next').show().css('visibility', 'visible');
             } else if (page >= totalPages) {
               $('#next').hide();
               $('#prev').show();
@@ -206,12 +318,12 @@
         }
       });
 
-      // Responsive behavior
+      // Responsive display mode
       $(window).resize(() => {
         flipbook.turn('display', getDisplayMode());
       });
 
-      // Navigation
+      // Navigation buttons
       $('#next').click(() => flipbook.turn('next'));
       $('#prev').click(() => flipbook.turn('previous'));
 
@@ -221,9 +333,42 @@
         if (e.key === 'ArrowLeft') flipbook.turn('previous');
       });
 
+      // Download button
+      $('#downloadBtn').click(() => {
+        const fileUrl = "https://drive.google.com/file/d/1-TPpWphal-BRA2bHS97IPHqxwev2YXaw/view?usp=sharing";
+        const a = document.createElement('a');
+        a.href = fileUrl;
+        a.target = "_blank";
+        a.click();
+      });
+
       // Start on cover page
       flipbook.turn('page', 1);
-      $('#prev').hide(); // only show next on cover page
+      $('#prev').hide();
+
+      // --- (5) Create thumbnails ---
+      for (let i = 1; i <= totalPages; i++) {
+        $('#thumbnails').append(
+          `<img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_${String(i).padStart(3,'0')}.jpg" alt="Page ${i}">`
+        );
+      }
+      $('#thumbnails img').click(function() {
+        const index = $(this).index() + 1;
+        flipbook.turn('page', index);
+      });
+
+      // --- (7) Zoom Lightbox on double click ---
+      $('#flipbook').on('dblclick', function() {
+        const page = flipbook.turn('page');
+        const imgSrc = $(`#flipbook .page:nth-child(${page}) img`).attr('src');
+        const lightbox = $(`<div id='lightbox'><img src='${imgSrc}'></div>`).appendTo('body');
+        lightbox.click(() => lightbox.remove());
+      });
+
+      // Entry animation
+      $(window).on('load', () => {
+        $('#flipbook').addClass('loaded');
+      });
     });
   </script>
 </body>
