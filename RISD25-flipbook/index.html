@@ -7,9 +7,9 @@
 
   <!-- Load jQuery first -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
-  <!-- Load Turn.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+
+  <!-- Load Turn.js from your uploaded file -->
+  <script src="https://cyyong-flip.github.io/RISD25-flipbook/assets/js/turn.min.js"></script>
 
   <style>
     body {
@@ -62,16 +62,16 @@
   </div>
 
   <script>
-    window.onload = function () {
-      const flipbook = document.getElementById('flipbook');
-      if (flipbook) {
-        $(flipbook).turn({
+    $(document).ready(function() {
+      const flipbook = $('#flipbook');
+      if (flipbook.length) {
+        flipbook.turn({
           width: 800,
           height: 500,
           autoCenter: true
         });
       }
-    };
+    });
   </script>
 
 </body>
