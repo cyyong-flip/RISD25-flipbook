@@ -6,40 +6,68 @@
   <title>RISD25-flipbook</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
   <style>
-    body { background: #f7f7f7; font-family: Arial, sans-serif; }
-    #flipbook { width: 800px; height: 500px; margin: 50px auto; }
-    #flipbook .page { width: 400px; height: 500px; }
+    body {
+      background: #f7f7f7;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    #flipbook {
+      width: 800px;
+      height: 500px;
+      margin: 50px auto;
+      background-color: #fff;
+      position: relative;
+    }
+
+    #flipbook .page {
+      width: 400px;
+      height: 500px;
+      background-color: #f0f0f0;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
   </style>
 </head>
 <body>
+
   <div id="flipbook">
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_001.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_002.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_003.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_004.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_005.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_006.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_007.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_008.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_009.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_010.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_011.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_012.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_013.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_014.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_015.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_016.jpg" width="400"></div>
-    <div class="page"><img src="https://raw.githubusercontent.com/cyyong-flip/RISD25-flipbook/main/RISD25-flipbook/images/page_017.jpg" width="400"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_001.jpg" alt="Page 1"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_002.jpg" alt="Page 2"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_003.jpg" alt="Page 3"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_004.jpg" alt="Page 4"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_005.jpg" alt="Page 5"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_006.jpg" alt="Page 6"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_007.jpg" alt="Page 7"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_008.jpg" alt="Page 8"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_009.jpg" alt="Page 9"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_010.jpg" alt="Page 10"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_011.jpg" alt="Page 11"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_012.jpg" alt="Page 12"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_013.jpg" alt="Page 13"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_014.jpg" alt="Page 14"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_015.jpg" alt="Page 15"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_016.jpg" alt="Page 16"></div>
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_017.jpg" alt="Page 17"></div>
   </div>
 
   <script>
-    document.getElementById('flipbook').turn({
-      width: 800,
-      height: 500,
-      autoCenter: true
-    });
+    window.onload = function () {
+      // Ensure the flipbook is initialized properly
+      const flipbook = document.getElementById('flipbook');
+      if (flipbook) {
+        $(flipbook).turn({
+          width: 800,
+          height: 500,
+          autoCenter: true
+        });
+      }
+    };
   </script>
+
 </body>
 </html>
-
-
