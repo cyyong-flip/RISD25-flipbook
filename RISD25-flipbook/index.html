@@ -23,10 +23,10 @@
       height: 100vh;
     }
 
-    /* Flipbook centered and proportional */
+    /* Flipbook container */
     #flipbook {
-      width: 95vw;
-      height: 95vh;
+      width: 800px; /* 400px per page × 2 */
+      height: 520px;
       background: #fff;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
       border-radius: 10px;
@@ -35,14 +35,15 @@
 
     #flipbook .page {
       background: #fff;
-      width: 100%;
-      height: 100%;
+      width: 400px;
+      height: 520px;
     }
 
     #flipbook img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain; /* ensure entire page fits inside */
+      width: 400px;
+      height: 520px;
+      object-fit: cover;
+      display: block;
     }
 
     /* Navigation buttons */
@@ -62,9 +63,9 @@
       background: rgba(0, 0, 0, 0.4);
       color: #fff;
       border: none;
-      padding: 15px 25px;
-      font-size: 22px;
-      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 20px;
+      border-radius: 6px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
@@ -76,10 +77,10 @@
     /* Page number */
     #pageNumber {
       position: fixed;
-      bottom: 15px;
+      bottom: 10px;
       width: 100%;
       text-align: center;
-      font-size: 18px;
+      font-size: 16px;
       color: #333;
       font-weight: 500;
       user-select: none;
@@ -103,12 +104,20 @@
       width: 60px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 850px) {
       #flipbook {
-        width: 100vw;
-        height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
+        width: 400px;
+        height: 520px;
+      }
+
+      #flipbook .page {
+        width: 400px;
+        height: 520px;
+      }
+
+      #flipbook img {
+        width: 400px;
+        height: 520px;
       }
     }
   </style>
@@ -121,7 +130,6 @@
 
   <!-- Flipbook -->
   <div id="flipbook">
-    <!-- 18 pages -->
     <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_001.jpg" /></div>
     <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_002.jpg" /></div>
     <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_003.jpg" /></div>
@@ -158,54 +166,64 @@
       const totalPages = 18;
       const pageNumber = $('#pageNumber');
 
-      // Helper: determine display type
       function getDisplayMode() {
-        return window.innerWidth <= 768 ? 'single' : 'double';
+        return window.innerWidth <= 850 ? 'single' : 'double';
       }
 
       // Initialize flipbook
       flipbook.turn({
-        width: '95vw',
-        height: '95vh',
+        width: 800,
+        height: 520,
         autoCenter: true,
         display: getDisplayMode(),
         elevation: 50,
         duration: 1000,
         gradients: true,
         when: {
-          turning: function(event, page) {
+          turning: function() {
             preloader.show();
           },
           turned: function(event, page) {
             preloader.hide();
+
             const isDouble = flipbook.turn('display') === 'double';
             const startPage = isDouble ? page : page;
             const endPage = isDouble ? page + 1 : page;
             pageNumber.text(`Page ${startPage}${isDouble && endPage <= totalPages ? '–' + endPage : ''} of ${totalPages}`);
-            $('#prev').toggle(page !== 1);
-            $('#next').toggle(page < totalPages);
+
+            // Button logic
+            if (page === 1) {
+              $('#prev').hide(); // hide left button
+              $('#next').show().css('visibility', 'visible'); // only show right button
+            } else if (page >= totalPages) {
+              $('#next').hide();
+              $('#prev').show();
+            } else {
+              $('#prev').show();
+              $('#next').show();
+            }
           }
         }
       });
 
-      // Adjust layout on resize
+      // Responsive behavior
       $(window).resize(() => {
         flipbook.turn('display', getDisplayMode());
       });
 
-      // Navigation buttons
+      // Navigation
       $('#next').click(() => flipbook.turn('next'));
       $('#prev').click(() => flipbook.turn('previous'));
 
-      // Keyboard arrows
+      // Keyboard navigation
       $(document).on('keydown', function(e) {
         if (e.key === 'ArrowRight') flipbook.turn('next');
         if (e.key === 'ArrowLeft') flipbook.turn('previous');
       });
 
-      // Start at first page
+      // Start on cover page
       flipbook.turn('page', 1);
-      $('#prev').hide();
+      $('#prev').hide(); // only show next on cover page
     });
   </script>
 </body>
