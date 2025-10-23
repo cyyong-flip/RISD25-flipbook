@@ -23,7 +23,7 @@
 
     /* Container for flipbook */
     #flipbook {
-      width: 90%;
+      width: 80%;
       max-width: 1200px;
       height: 600px;
       margin: 50px auto;
@@ -32,6 +32,7 @@
       border-radius: 15px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
       overflow: hidden;
+      display: flex;
     }
 
     /* Page styles */
@@ -55,15 +56,42 @@
       border: 5px solid #333;
     }
 
-    /* Buttons styling */
-    .nav-buttons {
+    /* Thumbnails navigation (vertical on left) */
+    .thumbnail-nav {
       position: absolute;
       top: 50%;
       left: 0;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding-right: 10px;
+      z-index: 10;
+    }
+
+    .thumbnail-nav img {
+      width: 50px;
+      height: auto;
+      margin: 5px 0;
+      border-radius: 5px;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+      cursor: pointer;
+    }
+
+    .thumbnail-nav img:hover {
+      opacity: 1;
+    }
+
+    /* Navigation buttons styling */
+    .nav-buttons {
+      position: absolute;
+      top: 50%;
       right: 0;
       display: flex;
-      justify-content: space-between;
-      width: 100%;
+      flex-direction: column;
+      justify-content: center;
       z-index: 10;
     }
 
@@ -75,6 +103,7 @@
       cursor: pointer;
       font-size: 18px;
       border-radius: 5px;
+      margin: 5px;
       transition: background-color 0.3s ease;
     }
 
@@ -84,27 +113,6 @@
 
     .nav-buttons button:focus {
       outline: none;
-    }
-
-    /* Thumbnails navigation (if you want to add thumbnails later) */
-    .thumbnail-nav {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    .thumbnail-nav img {
-      width: 50px;
-      height: auto;
-      margin: 0 5px;
-      border-radius: 5px;
-      opacity: 0.6;
-      transition: opacity 0.3s ease;
-      cursor: pointer;
-    }
-
-    .thumbnail-nav img:hover {
-      opacity: 1;
     }
 
     /* Preloader */
@@ -132,8 +140,9 @@
     <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
   </div>
 
-  <!-- Flipbook -->
+  <!-- Flipbook Container -->
   <div id="flipbook">
+    <!-- Cover page -->
     <div class="page cover-page">
       <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_001.jpg" alt="Cover Page">
     </div>
@@ -154,20 +163,37 @@
     <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_015.jpg" alt="Page 15"></div>
     <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_016.jpg" alt="Page 16"></div>
     <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_017.jpg" alt="Page 17"></div>
+    <!-- Page 18 -->
+    <div class="page"><img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_018.jpg" alt="Page 18"></div>
+  </div>
+
+  <!-- Thumbnails navigation (vertical on left) -->
+  <div class="thumbnail-nav">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_001.jpg" alt="Thumbnail 1">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_002.jpg" alt="Thumbnail 2">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_003.jpg" alt="Thumbnail 3">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_004.jpg" alt="Thumbnail 4">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_005.jpg" alt="Thumbnail 5">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_006.jpg" alt="Thumbnail 6">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_007.jpg" alt="Thumbnail 7">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_008.jpg" alt="Thumbnail 8">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_009.jpg" alt="Thumbnail 9">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_010.jpg" alt="Thumbnail 10">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_011.jpg" alt="Thumbnail 11">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_012.jpg" alt="Thumbnail 12">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_013.jpg" alt="Thumbnail 13">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_014.jpg" alt="Thumbnail 14">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_015.jpg" alt="Thumbnail 15">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_016.jpg" alt="Thumbnail 16">
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_017.jpg" alt="Thumbnail 17">
+    <!-- New Thumbnail for Page 18 -->
+    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_018.jpg" alt="Thumbnail 18">
   </div>
 
   <!-- Navigation buttons -->
   <div class="nav-buttons">
     <button id="prev">Previous</button>
     <button id="next">Next</button>
-  </div>
-
-  <!-- Thumbnail navigation (optional, if you want to add) -->
-  <div class="thumbnail-nav">
-    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_001.jpg" alt="Thumbnail 1">
-    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_002.jpg" alt="Thumbnail 2">
-    <img src="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_003.jpg" alt="Thumbnail 3">
-    <!-- Add more thumbnails here -->
   </div>
 
   <script>
@@ -180,8 +206,8 @@
         width: '100%',
         height: 600,
         autoCenter: true,
-        display: 'double',  // Display pages in "double page" style
-        gradients: true,    // Enable gradient effect during page flip
+        display: 'double',
+        gradients: true,
         when: {
           turning: function(event, page, view) {
             preloader.show();
@@ -201,9 +227,9 @@
         flipbook.turn('next');
       });
 
-      // Thumbnail navigation (optional)
+      // Thumbnail navigation
       $('.thumbnail-nav img').click(function() {
-        var pageIndex = $(this).index() + 1;  // 1-based index
+        var pageIndex = $(this).index() + 1;
         flipbook.turn('page', pageIndex);
       });
     });
