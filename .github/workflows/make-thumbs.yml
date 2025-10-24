@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'RISD25-flipbook/RISD25-flipbook/images/**.webp'
+      - 'RISD25-flipbook/RISD25-flipbook/images/**'
   workflow_dispatch:
 
 jobs:
@@ -18,22 +18,25 @@ jobs:
       - name: Install ImageMagick
         run: |
           sudo apt-get update
-          sudo apt-get install -y imagemagick
+          sudo apt-get install -y imagemagick webp
+          which magick || which convert
 
       - name: Create thumbs folder
         run: mkdir -p RISD25-flipbook/RISD25-flipbook/images/thumbs
 
-      - name: Generate thumbnails
+      - name: Generate thumbnails (convert → webp)
         run: |
-          echo "Generating thumbnails from images/"
-          magick mogrify \
-            -path RISD25-flipbook/RISD25-flipbook/images/thumbs \
-            -thumbnail 200x \
-            -format webp \
-            RISD25-flipbook/RISD25-flipbook/images/*.webp
+          echo "Generating thumbnails..."
+          for img in RISD25-flipbook/RISD25-flipbook/images/*.{jpg,jpeg,png,webp}; do
+            [ -f "$img" ] || continue
+            base=$(basename "$img")
+            name="${base%.*}"
+            echo "Processing $img -> $name.webp"
+            convert "$img" -resize 200x -quality 80 "RISD25-flipbook/RISD25-flipbook/images/thumbs/${name}.webp"
+          done
 
       - name: List generated files
-        run: ls -l RISD25-flipbook/RISD25-flipbook/images/thumbs || echo "No thumbs found"
+        run: ls -lh RISD25-flipbook/RISD25-flipbook/images/thumbs || echo "No thumbs found"
 
       - name: Commit and push thumbnails
         run: |
