@@ -4,7 +4,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'RISD25-flipbook/RISD25-flipbook/images/**.webp'
+      - '**.webp'
+      - '**.jpg'
+      - '**.jpeg'
+      - '**.png'
 
 jobs:
   build-thumbnails:
