@@ -1,3 +1,5 @@
+name: Generate WebP Thumbnails
+
 on:
   push:
     branches: [ main ]
@@ -6,6 +8,7 @@ on:
       - '**.jpg'
       - '**.jpeg'
       - '**.png'
+  workflow_dispatch:
 
 jobs:
   build-thumbnails:
@@ -18,28 +21,8 @@ jobs:
 
       # 2️⃣ Install ImageMagick (for `magick mogrify`)
       - name: Install ImageMagick
-        run: sudo apt-get update && sudo apt-get install -y imagemagick
-
-      # 3️⃣ Create thumbs folder if not exists
-      - name: Prepare thumbs folder
-        run: mkdir -p RISD25-flipbook/RISD25-flipbook/images/thumbs
-
-      # 4️⃣ Generate thumbnails (200 px wide)
-      - name: Generate thumbnails
         run: |
-          magick mogrify \
-            -path RISD25-flipbook/RISD25-flipbook/images/thumbs \
-            -thumbnail 200x \
-            -format webp \
-            RISD25-flipbook/RISD25-flipbook/images/*.webp
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
 
-      # 5️⃣ Commit & push thumbnails
-      - name: Commit and push thumbnails
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add RISD25-flipbook/RISD25-flipbook/images/thumbs/
-          git commit -m "Auto-generate WebP thumbnails" || echo "No changes"
-          git push
-
-  workflow_dispatch:
+      # 3️⃣ Prepare th
