@@ -1,0 +1,33 @@
+name: Convert JPG to WebP
+
+on:
+  push:
+    paths:
+      - 'RISD25-flipbook/RISD25-flipbook/images/**/*.jpg'
+  workflow_dispatch:
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install cwebp
+        run: sudo apt-get install -y webp
+
+      - name: Convert JPG to WebP
+        run: |
+          find RISD25-flipbook/RISD25-flipbook/images -type f -name "*.jpg" | while read img; do
+            webp="${img%.jpg}.webp"
+            cwebp -q 80 "$img" -o "$webp"
+            echo "Converted $img → $webp"
+          done
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add RISD25-flipbook/RISD25-flipbook/images/*.webp
+          git commit -m "Auto convert JPGs to WebP" || echo "No changes"
+          git push
