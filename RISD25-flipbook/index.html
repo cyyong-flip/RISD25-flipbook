@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RISD25 Flipbook</title>
 
+  <!-- ✅ Base URL so all images work on GitHub Pages -->
+  <base href="https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/">
+
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Turn.js -->
@@ -164,24 +167,26 @@
     <div class="page"></div>
 
     <!-- Flipbook pages (000–017) -->
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_000.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_000.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_000.jpg" alt="Page 0" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_001.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_001.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_001.jpg" alt="Page 1" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_002.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_002.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_002.jpg" alt="Page 2" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_003.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_003.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_003.jpg" alt="Page 3" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_004.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_004.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_004.jpg" alt="Page 4" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_005.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_005.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_005.jpg" alt="Page 5" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_006.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_006.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_006.jpg" alt="Page 6" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_007.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_007.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_007.jpg" alt="Page 7" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_008.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_008.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_008.jpg" alt="Page 8" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_009.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_009.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_009.jpg" alt="Page 9" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_010.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_010.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_010.jpg" alt="Page 10" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_011.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_011.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_011.jpg" alt="Page 11" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_012.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_012.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_012.jpg" alt="Page 12" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_013.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_013.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_013.jpg" alt="Page 13" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_014.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_014.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_014.jpg" alt="Page 14" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_015.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_015.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_015.jpg" alt="Page 15" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_016.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_016.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_016.jpg" alt="Page 16" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="RISD25-flipbook/images/page_017.webp" type="image/webp"><source srcset="RISD25-flipbook/images/page_017.jpg" type="image/jpeg"><img src="RISD25-flipbook/images/page_017.jpg" alt="Page 17" loading="lazy"></picture></div>
+    <!-- ✅ All images load from the correct base path now -->
+    <!-- Only short paths needed since <base> handles the prefix -->
+    <div class="page"><picture><source srcset="images/page_000.webp" type="image/webp"><source srcset="images/page_000.jpg" type="image/jpeg"><img src="images/page_000.jpg" alt="Page 0" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_001.webp" type="image/webp"><source srcset="images/page_001.jpg" type="image/jpeg"><img src="images/page_001.jpg" alt="Page 1" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_002.webp" type="image/webp"><source srcset="images/page_002.jpg" type="image/jpeg"><img src="images/page_002.jpg" alt="Page 2" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_003.webp" type="image/webp"><source srcset="images/page_003.jpg" type="image/jpeg"><img src="images/page_003.jpg" alt="Page 3" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_004.webp" type="image/webp"><source srcset="images/page_004.jpg" type="image/jpeg"><img src="images/page_004.jpg" alt="Page 4" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_005.webp" type="image/webp"><source srcset="images/page_005.jpg" type="image/jpeg"><img src="images/page_005.jpg" alt="Page 5" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_006.webp" type="image/webp"><source srcset="images/page_006.jpg" type="image/jpeg"><img src="images/page_006.jpg" alt="Page 6" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_007.webp" type="image/webp"><source srcset="images/page_007.jpg" type="image/jpeg"><img src="images/page_007.jpg" alt="Page 7" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_008.webp" type="image/webp"><source srcset="images/page_008.jpg" type="image/jpeg"><img src="images/page_008.jpg" alt="Page 8" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_009.webp" type="image/webp"><source srcset="images/page_009.jpg" type="image/jpeg"><img src="images/page_009.jpg" alt="Page 9" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_010.webp" type="image/webp"><source srcset="images/page_010.jpg" type="image/jpeg"><img src="images/page_010.jpg" alt="Page 10" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_011.webp" type="image/webp"><source srcset="images/page_011.jpg" type="image/jpeg"><img src="images/page_011.jpg" alt="Page 11" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_012.webp" type="image/webp"><source srcset="images/page_012.jpg" type="image/jpeg"><img src="images/page_012.jpg" alt="Page 12" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_013.webp" type="image/webp"><source srcset="images/page_013.jpg" type="image/jpeg"><img src="images/page_013.jpg" alt="Page 13" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_014.webp" type="image/webp"><source srcset="images/page_014.jpg" type="image/jpeg"><img src="images/page_014.jpg" alt="Page 14" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_015.webp" type="image/webp"><source srcset="images/page_015.jpg" type="image/jpeg"><img src="images/page_015.jpg" alt="Page 15" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_016.webp" type="image/webp"><source srcset="images/page_016.jpg" type="image/jpeg"><img src="images/page_016.jpg" alt="Page 16" loading="lazy"></picture></div>
+    <div class="page"><picture><source srcset="images/page_017.webp" type="image/webp"><source srcset="images/page_017.jpg" type="image/jpeg"><img src="images/page_017.jpg" alt="Page 17" loading="lazy"></picture></div>
   </div>
 
   <div class="nav-buttons">
@@ -239,9 +244,9 @@
         window.open(fileUrl, "_blank");
       });
 
-      // Thumbnails with WebP fallback
+      // ✅ Thumbnails auto use <base> path too
       for (let i = 0; i <= 17; i++){
-        const base = `https://cyyong-flip.github.io/RISD25-flipbook/RISD25-flipbook/images/page_${String(i).padStart(3,'0')}`;
+        const base = `images/page_${String(i).padStart(3,'0')}`;
         $('#thumbnails').append(`
           <picture>
             <source srcset="${base}.webp" type="image/webp">
