@@ -1,13 +1,13 @@
 name: Generate WebP Thumbnails
 
 permissions:
-  contents: write    # ✅ allow pushing commits
+  contents: write
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'RISD25-flipbook/RISD25-flipbook/images/**'
+      - 'RISD25-flipbook/images/**'
   workflow_dispatch:
 
 jobs:
@@ -22,24 +22,26 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y imagemagick webp
-          which magick || which convert
+          which convert || which magick
 
       - name: Create thumbs folder
-        run: mkdir -p RISD25-flipbook/RISD25-flipbook/images/thumbs
+        run: mkdir -p RISD25-flipbook/images/thumbs
 
       - name: Generate thumbnails (convert → webp)
         run: |
           echo "Generating thumbnails..."
-          for img in RISD25-flipbook/RISD25-flipbook/images/*.{jpg,jpeg,png,webp}; do
-            [ -f "$img" ] || continue
-            base=$(basename "$img")
-            name="${base%.*}"
-            echo "Processing $img -> $name.webp"
-            convert "$img" -resize 200x -quality 80 "RISD25-flipbook/RISD25-flipbook/images/thumbs/${name}.webp"
+          shopt -s nullglob
+          for img in RISD25-flipbook/images/*; do
+            if [[ "$img" =~ \.(jpg|jpeg|png|webp|JPG|JPEG|PNG)$ ]]; then
+              base=$(basename "$img")
+              name="${base%.*}"
+              echo "Processing $img -> $name.webp"
+              convert "$img" -resize 200x -quality 80 "RISD25-flipbook/images/thumbs/${name}.webp"
+            fi
           done
 
       - name: List generated files
-        run: ls -lh RISD25-flipbook/RISD25-flipbook/images/thumbs || echo "No thumbs found"
+        run: ls -lh RISD25-flipbook/images/thumbs || echo "No thumbs found"
 
       - name: Commit and push thumbnails
         env:
@@ -47,6 +49,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add RISD25-flipbook/RISD25-flipbook/images/thumbs/
+          git add RISD25-flipbook/images/thumbs/
           git commit -m "Auto-generate WebP thumbnails" || echo "No new thumbnails"
           git push
