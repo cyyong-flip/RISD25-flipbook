@@ -75,24 +75,6 @@
     }
     .nav-buttons button:hover { background-color: rgba(0,0,0,0.7); }
 
-    #pageNumber {
-      position: fixed;
-      top: 100px;
-      width: 100%;
-      text-align: center;
-      font-size: 12px;
-      color: #333;
-      font-weight: 500;
-      user-select: none;
-      z-index: 15;
-      opacity: 1;
-      transition: opacity 0.5s ease;
-    }
-    #pageNumber.fading { opacity: 0; }
-
-    /* optional: fade out when empty */
-    #pageNumber:empty { opacity: 0; }
-
     #preloader {
       position: fixed;
       top: 0; left: 0;
@@ -170,14 +152,12 @@
       #flipbook { width: 400px; height: 520px; }
       #flipbook .page, #flipbook img { width: 400px; height: 520px; }
       #thumbnails img { width: 20px; height: 28px; }
-      #pageNumber { top: 85px; }
     }
   </style>
 </head>
 <body>
   <div id="preloader"><img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..."></div>
   <button id="downloadBtn">⬇ Download Flipbook</button>
-  <div id="pageNumber"></div>
 
   <div id="flipbook">
     <!-- Empty front page -->
@@ -214,7 +194,6 @@
       const flipbook = $('#flipbook');
       const preloader = $('#preloader');
       const totalPages = 19; // empty page + 18 pages
-      const pageNumber = $('#pageNumber');
 
       function getDisplayMode() {
         return window.innerWidth <= 850 ? 'single' : 'double';
@@ -233,28 +212,12 @@
           turning: function() {
             flipbook.addClass('turning');
             preloader.show();
-            pageNumber.addClass('fading');
           },
           turned: function(event, page) {
             preloader.hide();
             flipbook.removeClass('turning');
-
-            const isDouble = flipbook.turn('display') === 'double';
-            const displayStart = String(page - 1).padStart(3, '0');
-            const displayEnd = isDouble && page < totalPages ? String(page).padStart(3, '0') : displayStart;
-
-            // Hide page number for first spread (page_000 + page_001)
-            if (page <= 2) {
-              pageNumber.text('');
-            } else {
-              pageNumber.text(`Page ${displayStart}${isDouble ? '–' + displayEnd : ''} of ${totalPages - 1}`);
-            }
-
-            pageNumber.removeClass('fading');
-
             $('#prev').toggle(page > 2);
             $('#next').toggle(page < totalPages);
-
             $('#thumbnails img').removeClass('active');
             $('#thumbnails img').eq(page - 2).addClass('active');
           }
