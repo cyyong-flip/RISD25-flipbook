@@ -1,0 +1,57 @@
+name: Convert JPG to WebP + Generate Thumbnails
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'RISD25-flipbook/RISD25-flipbook/images/**.jpg'
+      - 'RISD25-flipbook/RISD25-flipbook/images/**.jpeg'
+
+jobs:
+  build-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Check out your repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Install ImageMagick
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
+      # 3️⃣ Make sure folders exist
+      - name: Prepare folders
+        run: mkdir -p RISD25-flipbook/RISD25-flipbook/images/thumbs
+
+      # 4️⃣ Convert all JPG → WebP (skipping already existing .webp files)
+      - name: Convert JPG to WebP
+        run: |
+          cd RISD25-flipbook/RISD25-flipbook/images
+          for img in *.jpg *.jpeg; do
+            [ -e "$img" ] || continue
+            base="${img%.*}"
+            if [ ! -f "${base}.webp" ]; then
+              echo "Converting $img → ${base}.webp"
+              magick "$img" -quality 85 "${base}.webp"
+            fi
+          done
+
+      # 5️⃣ Generate 200px-wide thumbnails
+      - name: Generate thumbnails
+        run: |
+          magick mogrify \
+            -path RISD25-flipbook/RISD25-flipbook/images/thumbs \
+            -thumbnail 200x \
+            -format webp \
+            RISD25-flipbook/RISD25-flipbook/images/*.webp
+
+      # 6️⃣ Commit & push results
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add RISD25-flipbook/RISD25-flipbook/images/*.webp
+          git add RISD25-flipbook/RISD25-flipbook/images/thumbs/
+          git commit -m "Auto-convert JPG → WebP and generate thumbnails" || echo "No new images"
+          git push
