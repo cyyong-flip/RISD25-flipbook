@@ -3,15 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RISD25 Flipbook</title>
+  <title>RISD25 Flipbook (Optimized)</title>
 
-  <!-- ✅ Base URL so all images work on GitHub Pages -->
-  <base href="./images/">
-
-  <!-- jQuery -->
+  <!-- Dependencies -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Turn.js -->
-  <script src="https://cyyong-flip.github.io/RISD25-flipbook/assets/js/turn.min.js"></script>
+  <script src="./assets/js/turn.min.js"></script>
 
   <style>
     body {
@@ -37,6 +33,7 @@
       transform: scale(0.95);
       transition: all 0.8s ease;
     }
+
     #flipbook.loaded { opacity: 1; transform: scale(1); }
 
     #flipbook .page {
@@ -76,6 +73,7 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
     .nav-buttons button:hover { background-color: rgba(0,0,0,0.7); }
 
     #preloader {
@@ -88,6 +86,7 @@
       align-items: center;
       z-index: 100;
     }
+
     #preloader img { width: 60px; }
 
     #downloadBtn {
@@ -105,6 +104,7 @@
       transition: background-color 0.3s ease;
       z-index: 20;
     }
+
     #downloadBtn:hover { background-color: #0056b3; }
 
     #thumbnails {
@@ -122,7 +122,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       z-index: 15;
     }
-    #thumbnails picture { flex-shrink: 0; }
+
     #thumbnails img {
       width: 28px;
       height: 40px;
@@ -131,25 +131,15 @@
       border: 2px solid transparent;
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
-    #thumbnails img:hover { transform: scale(1.15); box-shadow: 0 0 4px rgba(0,0,0,0.4); }
-    #thumbnails img.active { border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.5); }
 
-    #lightbox {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 200;
-      cursor: zoom-out;
+    #thumbnails img:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 4px rgba(0,0,0,0.4);
     }
-    #lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 8px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+
+    #thumbnails img.active {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0,123,255,0.5);
     }
 
     @media (max-width: 850px) {
@@ -157,124 +147,157 @@
       #flipbook .page, #flipbook img { width: 400px; height: 520px; }
       #thumbnails img { width: 20px; height: 28px; }
     }
+
+    /* --- Per-page Spinner Styles --- */
+    .page-loader {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255,255,255,0.85);
+      z-index: 2;
+    }
+
+    .spinner {
+      border: 3px solid rgba(0,0,0,0.1);
+      border-top: 3px solid #007bff;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
+
 <body>
   <div id="preloader"><img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..."></div>
   <button id="downloadBtn">⬇ Download Flipbook</button>
 
   <div id="flipbook">
-    <div class="page"></div>
-
-    <!-- Flipbook pages (000–017) -->
-    <!-- ✅ All images load from the correct base path now -->
-    <!-- Only short paths needed since <base> handles the prefix -->
-    <div class="page"><picture><source srcset="images/page_000.webp" type="image/webp"><source srcset="images/page_000.jpg" type="image/jpeg"><img src="images/page_000.jpg" alt="Page 0" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_001.webp" type="image/webp"><source srcset="images/page_001.jpg" type="image/jpeg"><img src="images/page_001.jpg" alt="Page 1" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_002.webp" type="image/webp"><source srcset="images/page_002.jpg" type="image/jpeg"><img src="images/page_002.jpg" alt="Page 2" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_003.webp" type="image/webp"><source srcset="images/page_003.jpg" type="image/jpeg"><img src="images/page_003.jpg" alt="Page 3" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_004.webp" type="image/webp"><source srcset="images/page_004.jpg" type="image/jpeg"><img src="images/page_004.jpg" alt="Page 4" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_005.webp" type="image/webp"><source srcset="images/page_005.jpg" type="image/jpeg"><img src="images/page_005.jpg" alt="Page 5" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_006.webp" type="image/webp"><source srcset="images/page_006.jpg" type="image/jpeg"><img src="images/page_006.jpg" alt="Page 6" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_007.webp" type="image/webp"><source srcset="images/page_007.jpg" type="image/jpeg"><img src="images/page_007.jpg" alt="Page 7" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_008.webp" type="image/webp"><source srcset="images/page_008.jpg" type="image/jpeg"><img src="images/page_008.jpg" alt="Page 8" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_009.webp" type="image/webp"><source srcset="images/page_009.jpg" type="image/jpeg"><img src="images/page_009.jpg" alt="Page 9" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_010.webp" type="image/webp"><source srcset="images/page_010.jpg" type="image/jpeg"><img src="images/page_010.jpg" alt="Page 10" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_011.webp" type="image/webp"><source srcset="images/page_011.jpg" type="image/jpeg"><img src="images/page_011.jpg" alt="Page 11" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_012.webp" type="image/webp"><source srcset="images/page_012.jpg" type="image/jpeg"><img src="images/page_012.jpg" alt="Page 12" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_013.webp" type="image/webp"><source srcset="images/page_013.jpg" type="image/jpeg"><img src="images/page_013.jpg" alt="Page 13" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_014.webp" type="image/webp"><source srcset="images/page_014.jpg" type="image/jpeg"><img src="images/page_014.jpg" alt="Page 14" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_015.webp" type="image/webp"><source srcset="images/page_015.jpg" type="image/jpeg"><img src="images/page_015.jpg" alt="Page 15" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_016.webp" type="image/webp"><source srcset="images/page_016.jpg" type="image/jpeg"><img src="images/page_016.jpg" alt="Page 16" loading="lazy"></picture></div>
-    <div class="page"><picture><source srcset="images/page_017.webp" type="image/webp"><source srcset="images/page_017.jpg" type="image/jpeg"><img src="images/page_017.jpg" alt="Page 17" loading="lazy"></picture></div>
+    <div class="page"></div> <!-- Empty first page -->
   </div>
 
   <div class="nav-buttons">
     <button id="prev">❮</button>
     <button id="next">❯</button>
   </div>
+
   <div id="thumbnails"></div>
 
   <script>
-    $(document).ready(function() {
-      const flipbook = $('#flipbook');
-      const preloader = $('#preloader');
-      const totalPages = 19; // empty page + 18 pages
+  $(function() {
+    const flipbook = $('#flipbook');
+    const preloader = $('#preloader');
+    const totalPages = 19; // 1 empty + 18 real pages
+    const baseURL = "./images/"; // ✅ Local images for Cloudflare Pages
 
-      function getDisplayMode() {
-        return window.innerWidth <= 850 ? 'single' : 'double';
-      }
+    function getDisplayMode() {
+      return window.innerWidth <= 850 ? 'single' : 'double';
+    }
 
-      flipbook.turn({
-        width: 800,
-        height: 520,
-        autoCenter: true,
-        display: getDisplayMode(),
-        page: 2,
-        elevation: 50,
-        duration: 1000,
-        gradients: true,
-        when: {
-          turning: function() {
-            flipbook.addClass('turning');
-            preloader.show();
-          },
-          turned: function(event, page) {
-            preloader.hide();
-            flipbook.removeClass('turning');
-            $('#prev').toggle(page > 2);
-            $('#next').toggle(page < totalPages);
-            $('#thumbnails img').removeClass('active');
-            $('#thumbnails img').eq(page - 2).addClass('active');
-          }
-        }
-      });
-
-      $(window).resize(() => { flipbook.turn('display', getDisplayMode()); });
-      $('#next').click(() => flipbook.turn('next'));
-      $('#prev').click(() => flipbook.turn('previous'));
-
-      $(document).on('keydown', function(e){
-        if (e.key === 'ArrowRight') flipbook.turn('next');
-        if (e.key === 'ArrowLeft') flipbook.turn('previous');
-      });
-
-      $('#downloadBtn').click(() => {
-        const fileUrl = "https://drive.google.com/file/d/1-TPpWphal-BRA2bHS97IPHqxwev2YXaw/view?usp=sharing";
-        window.open(fileUrl, "_blank");
-      });
-
-      // ✅ Thumbnails auto use <base> path too
-      for (let i = 0; i <= 17; i++){
-        const base = `images/page_${String(i).padStart(3,'0')}`;
-        $('#thumbnails').append(`
-          <picture>
-            <source srcset="${base}.webp" type="image/webp">
-            <source srcset="${base}.jpg" type="image/jpeg">
-            <img src="${base}.jpg" alt="Thumbnail ${i}" loading="lazy">
-          </picture>
+    // Create placeholder pages with spinners
+    for (let i = 1; i < totalPages; i++) {
+      if (i > 1) {
+        flipbook.append(`
+          <div class="page" data-index="${i}">
+            <div class="page-loader">
+              <div class="spinner"></div>
+            </div>
+          </div>
         `);
       }
+    }
 
-      $('#thumbnails img').click(function(){
-        const index = $(this).parent().index() + 2;
-        flipbook.turn('page', index);
+    // Lazy-load page images
+    function loadPage(page) {
+      const pageDiv = $(`#flipbook .page[data-index="${page}"]`);
+      if (pageDiv.children('img').length === 0 && page > 1) {
+        const loader = pageDiv.find('.page-loader');
+        loader.show();
+
+        const img = new Image();
+        img.src = `${baseURL}page_${String(page - 2).padStart(3,'0')}.webp`;
+        img.loading = "lazy";
+        img.decoding = "async";
+        img.alt = `Page ${page - 2}`;
+        img.onload = () => {
+          loader.fadeOut(200);
+          pageDiv.append(img);
+        };
+        img.onerror = () => {
+          loader.html('<span style="color:#999;font-size:12px;">⚠ Failed to load</span>');
+        };
+      }
+    }
+
+    // Preload adjacent pages for smoother flipping
+    function preloadNearby(page) {
+      [page - 1, page + 1, page + 2].forEach(p => {
+        if (p > 1 && p < totalPages) loadPage(p);
       });
+    }
 
-      $('#flipbook').on('dblclick', function(){
-        const page = flipbook.turn('page');
-        const imgSrc = $(`#flipbook .page:nth-child(${page}) img`).attr('src');
-        if(imgSrc){
-          const lightbox = $(`<div id='lightbox'><img src='${imgSrc}'></div>`).appendTo('body');
-          lightbox.click(()=> lightbox.remove());
+    // Initialize flipbook
+    flipbook.turn({
+      width: 800,
+      height: 520,
+      autoCenter: true,
+      display: getDisplayMode(),
+      page: 2,
+      duration: 800,
+      gradients: true,
+      when: {
+        turning: () => preloader.show(),
+        turned: (e, page) => {
+          preloader.hide();
+          $('#prev').toggle(page > 2);
+          $('#next').toggle(page < totalPages);
+          $('#thumbnails img').removeClass('active').eq(page - 2).addClass('active');
+          loadPage(page);
+          preloadNearby(page);
         }
-      });
-
-      flipbook.addClass('loaded');
-      $('#prev').hide();
-      $('#thumbnails img:nth-child(1)').addClass('active');
+      }
     });
+
+    // Initial page load
+    loadPage(2);
+    preloadNearby(2);
+
+    // Navigation
+    $(window).resize(() => flipbook.turn('display', getDisplayMode()));
+    $('#next').click(() => flipbook.turn('next'));
+    $('#prev').click(() => flipbook.turn('previous'));
+
+    $(document).on('keydown', e => {
+      if (e.key === 'ArrowRight') flipbook.turn('next');
+      if (e.key === 'ArrowLeft') flipbook.turn('previous');
+    });
+
+    $('#downloadBtn').click(() =>
+      window.open("https://drive.google.com/file/d/1-TPpWphal-BRA2bHS97IPHqxwev2YXaw/view?usp=sharing", "_blank")
+    );
+
+    // Thumbnails
+    for (let i = 0; i < 18; i++) {
+      $('#thumbnails').append(
+        `<img src="${baseURL}page_${String(i).padStart(3,'0')}.webp" loading="lazy" decoding="async">`
+      );
+    }
+
+    $('#thumbnails').on('click', 'img', function() {
+      const page = $(this).index() + 2;
+      flipbook.turn('page', page);
+    });
+
+    flipbook.addClass('loaded');
+    $('#prev').hide();
+  });
   </script>
 </body>
 </html>
-
