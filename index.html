@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RISD25 Flipbook (Optimized)</title>
+  <title>RISD25 Flipbook</title>
 
   <!-- Dependencies -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -192,112 +192,117 @@
 
   <script>
   $(function() {
-    const flipbook = $('#flipbook');
-    const preloader = $('#preloader');
-    const totalPages = 19; // 1 empty + 18 real pages
-    const baseURL = "./images/"; // ✅ Local images for Cloudflare Pages
+  const flipbook = $('#flipbook');
+  const preloader = $('#preloader');
+  const totalPages = 20; // 1 empty + 18 real + 1 blank at back
+  const baseURL = "./images/";
 
-    function getDisplayMode() {
-      return window.innerWidth <= 850 ? 'single' : 'double';
-    }
+  function getDisplayMode() {
+    return window.innerWidth <= 850 ? 'single' : 'double';
+  }
 
-    // Create placeholder pages with spinners
-    for (let i = 1; i < totalPages; i++) {
-      if (i > 1) {
-        flipbook.append(`
-          <div class="page" data-index="${i}">
-            <div class="page-loader">
-              <div class="spinner"></div>
-            </div>
+  // Create placeholder pages with spinners
+  for (let i = 1; i < totalPages; i++) {
+    if (i > 1) {
+      flipbook.append(`
+        <div class="page" data-index="${i}">
+          <div class="page-loader">
+            <div class="spinner"></div>
           </div>
-        `);
+        </div>
+      `);
+    }
+  }
+
+  // Lazy-load page images
+  function loadPage(page) {
+    const pageDiv = $(`#flipbook .page[data-index="${page}"]`);
+    if (pageDiv.children('img').length === 0 && page > 1) {
+      const loader = pageDiv.find('.page-loader');
+      loader.show();
+
+      // ✅ Adjusted: add page_019.webp as the final empty page
+      const imgIndex = page - 2;
+      const filename = imgIndex <= 17 ? `page_${String(imgIndex).padStart(3,'0')}.webp` : `page_019.webp`;
+
+      const img = new Image();
+      img.src = `${baseURL}${filename}`;
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.alt = `Page ${imgIndex}`;
+      img.onload = () => {
+        loader.fadeOut(200);
+        pageDiv.append(img);
+      };
+      img.onerror = () => {
+        loader.html('<span style="color:#999;font-size:12px;">⚠ Failed to load</span>');
+      };
+    }
+  }
+
+  // Preload adjacent pages for smoother flipping
+  function preloadNearby(page) {
+    [page - 1, page + 1, page + 2].forEach(p => {
+      if (p > 1 && p < totalPages) loadPage(p);
+    });
+  }
+
+  // Initialize flipbook
+  flipbook.turn({
+    width: 800,
+    height: 520,
+    autoCenter: true,
+    display: getDisplayMode(),
+    page: 2,
+    duration: 800,
+    gradients: true,
+    when: {
+      turning: () => preloader.show(),
+      turned: (e, page) => {
+        preloader.hide();
+        $('#prev').toggle(page > 2);
+        $('#next').toggle(page < totalPages);
+        $('#thumbnails img').removeClass('active').eq(page - 2).addClass('active');
+        loadPage(page);
+        preloadNearby(page);
       }
     }
-
-    // Lazy-load page images
-    function loadPage(page) {
-      const pageDiv = $(`#flipbook .page[data-index="${page}"]`);
-      if (pageDiv.children('img').length === 0 && page > 1) {
-        const loader = pageDiv.find('.page-loader');
-        loader.show();
-
-        const img = new Image();
-        img.src = `${baseURL}page_${String(page - 2).padStart(3,'0')}.webp`;
-        img.loading = "lazy";
-        img.decoding = "async";
-        img.alt = `Page ${page - 2}`;
-        img.onload = () => {
-          loader.fadeOut(200);
-          pageDiv.append(img);
-        };
-        img.onerror = () => {
-          loader.html('<span style="color:#999;font-size:12px;">⚠ Failed to load</span>');
-        };
-      }
-    }
-
-    // Preload adjacent pages for smoother flipping
-    function preloadNearby(page) {
-      [page - 1, page + 1, page + 2].forEach(p => {
-        if (p > 1 && p < totalPages) loadPage(p);
-      });
-    }
-
-    // Initialize flipbook
-    flipbook.turn({
-      width: 800,
-      height: 520,
-      autoCenter: true,
-      display: getDisplayMode(),
-      page: 2,
-      duration: 800,
-      gradients: true,
-      when: {
-        turning: () => preloader.show(),
-        turned: (e, page) => {
-          preloader.hide();
-          $('#prev').toggle(page > 2);
-          $('#next').toggle(page < totalPages);
-          $('#thumbnails img').removeClass('active').eq(page - 2).addClass('active');
-          loadPage(page);
-          preloadNearby(page);
-        }
-      }
-    });
-
-    // Initial page load
-    loadPage(2);
-    preloadNearby(2);
-
-    // Navigation
-    $(window).resize(() => flipbook.turn('display', getDisplayMode()));
-    $('#next').click(() => flipbook.turn('next'));
-    $('#prev').click(() => flipbook.turn('previous'));
-
-    $(document).on('keydown', e => {
-      if (e.key === 'ArrowRight') flipbook.turn('next');
-      if (e.key === 'ArrowLeft') flipbook.turn('previous');
-    });
-
-    $('#downloadBtn').click(() =>
-      window.open("https://drive.google.com/file/d/1-TPpWphal-BRA2bHS97IPHqxwev2YXaw/view?usp=sharing", "_blank")
-    );
-
-    // Thumbnails
-    for (let i = 0; i < 18; i++) {
-      $('#thumbnails').append(
-        `<img src="${baseURL}page_${String(i).padStart(3,'0')}.webp" loading="lazy" decoding="async">`
-      );
-    }
-
-    $('#thumbnails').on('click', 'img', function() {
-      const page = $(this).index() + 2;
-      flipbook.turn('page', page);
-    });
-
-    flipbook.addClass('loaded');
-    $('#prev').hide();
   });
+
+  // Initial page load
+  loadPage(2);
+  preloadNearby(2);
+
+  // Navigation
+  $(window).resize(() => flipbook.turn('display', getDisplayMode()));
+  $('#next').click(() => flipbook.turn('next'));
+  $('#prev').click(() => flipbook.turn('previous'));
+
+  $(document).on('keydown', e => {
+    if (e.key === 'ArrowRight') flipbook.turn('next');
+    if (e.key === 'ArrowLeft') flipbook.turn('previous');
+  });
+
+  $('#downloadBtn').click(() =>
+    window.open("https://drive.google.com/file/d/1-TPpWphal-BRA2bHS97IPHqxwev2YXaw/view?usp=sharing", "_blank")
+  );
+
+  // ✅ Only 18 thumbnails (no blank page thumbnail)
+  for (let i = 0; i < 18; i++) {
+    $('#thumbnails').append(
+      `<img src="${baseURL}page_${String(i).padStart(3,'0')}.webp" loading="lazy" decoding="async">`
+    );
+  }
+
+  $('#thumbnails').on('click', 'img', function() {
+    const page = $(this).index() + 2;
+    flipbook.turn('page', page);
+  });
+
+  flipbook.addClass('loaded');
+  $('#prev').hide();
+});
   </script>
 </body>
 </html>
+
