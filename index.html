@@ -108,52 +108,50 @@
     #downloadBtn:hover { background-color: #0056b3; }
 
     /* Thumbnails bar */
-#thumbnails {
-  position: fixed;
-  bottom: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 2px;
-  overflow-x: auto;
-  max-width: 95%;
-  padding: 4px 6px;
-  background: rgba(255,255,255,0.85);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  z-index: 15;
-}
+    #thumbnails {
+      position: fixed;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      max-width: 95%;
+      padding: 4px 6px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      z-index: 15;
+    }
 
-/* Thumbnail images */
-#thumbnails img {
-  width: 22px;          /* 🔹 smaller size (was 28px) */
-  height: 32px;         /* 🔹 smaller height (was 40px) */
-  cursor: pointer;
-  border-radius: 3px;
-  border: 1.5px solid transparent;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
+    /* Thumbnail images */
+    #thumbnails img {
+      width: 22px;
+      height: 32px;
+      cursor: pointer;
+      border-radius: 3px;
+      border: 1.5px solid transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
 
-#thumbnails img:hover {
-  transform: scale(1.15);
-  box-shadow: 0 0 3px rgba(0,0,0,0.35);
-}
+    #thumbnails img:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 3px rgba(0,0,0,0.35);
+    }
 
-#thumbnails img.active {
-  border-color: #007bff;
-  box-shadow: 0 0 4px rgba(0,123,255,0.4);
-}
+    #thumbnails img.active {
+      border-color: #007bff;
+      box-shadow: 0 0 4px rgba(0,123,255,0.4);
+    }
 
-/* Smaller thumbnails on mobile */
-@media (max-width: 850px) {
-  #thumbnails img {
-    width: 18px;
-    height: 26px;
-  }
-}
+    @media (max-width: 850px) {
+      #thumbnails img {
+        width: 18px;
+        height: 26px;
+      }
+    }
 
-
-    /* --- Per-page Spinner Styles --- */
+    /* Page loader spinner */
     .page-loader {
       position: absolute;
       top: 0; left: 0;
@@ -197,118 +195,118 @@
 
   <script>
   $(function() {
-  const flipbook = $('#flipbook');
-  const preloader = $('#preloader');
-  const totalPages = 20; // 1 empty + 18 real + 1 blank at back
-  const baseURL = "./images/";
+    const flipbook = $('#flipbook');
+    const preloader = $('#preloader');
+    const totalPages = 20; // 1 empty + 18 real + 1 blank at back
+    const baseURL = "./images/";
 
-  function getDisplayMode() {
-    return window.innerWidth <= 850 ? 'single' : 'double';
-  }
+    function getDisplayMode() {
+      return window.innerWidth <= 850 ? 'single' : 'double';
+    }
 
-  // Create placeholder pages with spinners
-  for (let i = 1; i < totalPages; i++) {
-    if (i > 1) {
-      flipbook.append(`
-        <div class="page" data-index="${i}">
-          <div class="page-loader">
-            <div class="spinner"></div>
+    // Create placeholder pages with spinners
+    for (let i = 1; i < totalPages; i++) {
+      if (i > 1) {
+        flipbook.append(`
+          <div class="page" data-index="${i}">
+            <div class="page-loader">
+              <div class="spinner"></div>
+            </div>
           </div>
-        </div>
-      `);
-    }
-  }
-
-  // Lazy-load page images
-  function loadPage(page) {
-    const pageDiv = $(`#flipbook .page[data-index="${page}"]`);
-    if (pageDiv.children('img').length === 0 && page > 1) {
-      const loader = pageDiv.find('.page-loader');
-      loader.show();
-
-      // ✅ Adjusted: add page_019.webp as the final empty page
-      const imgIndex = page - 2;
-      const filename = imgIndex <= 17 ? `page_${String(imgIndex).padStart(3,'0')}.webp` : `page_019.webp`;
-
-      const img = new Image();
-      img.src = `${baseURL}${filename}`;
-      img.loading = "lazy";
-      img.decoding = "async";
-      img.alt = `Page ${imgIndex}`;
-      img.onload = () => {
-        loader.fadeOut(200);
-        pageDiv.append(img);
-      };
-      img.onerror = () => {
-        loader.html('<span style="color:#999;font-size:12px;">⚠ Failed to load</span>');
-      };
-    }
-  }
-
-  // Preload adjacent pages for smoother flipping
-  function preloadNearby(page) {
-    [page - 1, page + 1, page + 2].forEach(p => {
-      if (p > 1 && p < totalPages) loadPage(p);
-    });
-  }
-
-  // Initialize flipbook
-  flipbook.turn({
-    width: 800,
-    height: 520,
-    autoCenter: true,
-    display: getDisplayMode(),
-    page: 2,
-    duration: 800,
-    gradients: true,
-    when: {
-      turning: () => preloader.show(),
-      turned: (e, page) => {
-        preloader.hide();
-        $('#prev').toggle(page > 2);
-        $('#next').toggle(page < totalPages);
-        $('#thumbnails img').removeClass('active').eq(page - 2).addClass('active');
-        loadPage(page);
-        preloadNearby(page);
+        `);
       }
     }
-  });
 
-  // Initial page load
-  loadPage(2);
-  preloadNearby(2);
+    // Lazy-load page images
+    function loadPage(page) {
+      const pageDiv = $(`#flipbook .page[data-index="${page}"]`);
+      if (pageDiv.children('img').length === 0 && page > 1) {
+        const loader = pageDiv.find('.page-loader');
+        loader.show();
 
-  // Navigation
-  $(window).resize(() => flipbook.turn('display', getDisplayMode()));
-  $('#next').click(() => flipbook.turn('next'));
-  $('#prev').click(() => flipbook.turn('previous'));
+        const imgIndex = page - 2;
+        const filename = imgIndex <= 17 ? `page_${String(imgIndex).padStart(3,'0')}.webp` : `page_019.webp`;
 
-  $(document).on('keydown', e => {
-    if (e.key === 'ArrowRight') flipbook.turn('next');
-    if (e.key === 'ArrowLeft') flipbook.turn('previous');
-  });
+        const img = new Image();
+        img.src = `${baseURL}${filename}`;
+        img.loading = "lazy";
+        img.decoding = "async";
+        img.alt = `Page ${imgIndex}`;
+        img.onload = () => {
+          loader.fadeOut(200);
+          pageDiv.append(img);
+        };
+        img.onerror = () => {
+          loader.html('<span style="color:#999;font-size:12px;">⚠ Failed to load</span>');
+        };
+      }
+    }
 
-  $('#downloadBtn').click(() =>
-    window.open("https://drive.google.com/file/d/1-TPpWphal-BRA2bHS97IPHqxwev2YXaw/view?usp=sharing", "_blank")
-  );
+    // Preload adjacent pages for smoother flipping
+    function preloadNearby(page) {
+      [page - 1, page + 1, page + 2].forEach(p => {
+        if (p > 1 && p < totalPages) loadPage(p);
+      });
+    }
 
-  // ✅ Only 18 thumbnails (no blank page thumbnail)
-  for (let i = 0; i < 18; i++) {
-    $('#thumbnails').append(
-      `<img src="${baseURL}page_${String(i).padStart(3,'0')}.webp" loading="lazy" decoding="async">`
+    // Initialize flipbook
+    flipbook.turn({
+      width: 800,
+      height: 520,
+      autoCenter: true,
+      display: getDisplayMode(),
+      page: 2, // start on the second page
+      duration: 800,
+      gradients: true,
+      when: {
+        turning: () => preloader.show(),
+        turned: (e, page) => {
+          preloader.hide();
+          $('#prev').toggle(page > 2);
+          $('#next').toggle(page < totalPages);
+          $('#thumbnails img').removeClass('active').eq(page - 2).addClass('active');
+          loadPage(page);
+          preloadNearby(page);
+        }
+      }
+    });
+
+    // ✅ Build thumbnails first
+    for (let i = 0; i < 18; i++) {
+      $('#thumbnails').append(
+        `<img src="${baseURL}page_${String(i).padStart(3,'0')}.webp" loading="lazy" decoding="async">`
+      );
+    }
+
+    // ✅ Highlight the second thumbnail as active on load
+    $('#thumbnails img').eq(1).addClass('active');
+
+    // Initial load
+    loadPage(2);
+    preloadNearby(2);
+
+    // Navigation
+    $(window).resize(() => flipbook.turn('display', getDisplayMode()));
+    $('#next').click(() => flipbook.turn('next'));
+    $('#prev').click(() => flipbook.turn('previous'));
+
+    $(document).on('keydown', e => {
+      if (e.key === 'ArrowRight') flipbook.turn('next');
+      if (e.key === 'ArrowLeft') flipbook.turn('previous');
+    });
+
+    $('#downloadBtn').click(() =>
+      window.open("https://drive.google.com/file/d/1-TPpWphal-BRA2bHS97IPHqxwev2YXaw/view?usp=sharing", "_blank")
     );
-  }
 
-  $('#thumbnails').on('click', 'img', function() {
-    const page = $(this).index() + 2;
-    flipbook.turn('page', page);
+    $('#thumbnails').on('click', 'img', function() {
+      const page = $(this).index() + 2;
+      flipbook.turn('page', page);
+    });
+
+    flipbook.addClass('loaded');
+    $('#prev').hide();
   });
-
-  flipbook.addClass('loaded');
-  $('#prev').hide();
-});
   </script>
 </body>
 </html>
-
-
