@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimal-ui" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RISD25 Flipbook</title>
 
   <!-- Dependencies -->
@@ -144,7 +144,14 @@
       box-shadow: 0 0 4px rgba(0,123,255,0.4);
     }
 
-    /* Spinner */
+    @media (max-width: 850px) {
+      #thumbnails img {
+        width: 18px;
+        height: 26px;
+      }
+    }
+
+    /* Page loader spinner */
     .page-loader {
       position: absolute;
       top: 0; left: 0;
@@ -165,76 +172,8 @@
       animation: spin 0.8s linear infinite;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Landscape mobile optimization */
-    @media (max-width: 850px) and (orientation: landscape) {
-      body {
-        flex-direction: column;
-        justify-content: space-evenly;
-      }
-
-      #flipbook {
-        width: 100%;
-        height: 80vh;
-        box-shadow: none;
-        transform: none;
-        border-radius: 0;
-      }
-
-      #flipbook .page {
-        width: 50%;
-        height: 100%;
-      }
-
-      #flipbook img {
-        width: 100%;
-        height: auto;
-      }
-
-      #thumbnails {
-        bottom: 10px;
-        padding: 3px 5px;
-      }
-
-      #thumbnails img {
-        width: 24px;
-        height: 36px;
-      }
-
-      .nav-buttons button {
-        font-size: 18px;
-      }
-    }
-
-    /* Auto landscape view when phone is vertical (portrait) */
-    @media (max-width: 850px) and (orientation: portrait) {
-      html, body {
-        width: 100vh;
-        height: 100vw;
-        overflow: hidden;
-      }
-
-      body {
-        transform: rotate(90deg);
-        transform-origin: center center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      #flipbook {
-        width: 100vw;
-        height: 90vh;
-      }
-
-      .nav-buttons, #downloadBtn, #thumbnails {
-        transform: rotate(-90deg);
-        transform-origin: center center;
-      }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -261,19 +200,18 @@
     const totalPages = 20; // 1 empty + 18 real + 1 blank at back
     const baseURL = "./images/";
 
-    // Detect display mode (single for small/landscape)
     function getDisplayMode() {
-      const isLandscape = window.innerWidth > window.innerHeight;
-      if (window.innerWidth <= 850 || isLandscape) return 'single';
-      return 'double';
+      return window.innerWidth <= 850 ? 'single' : 'double';
     }
 
-    // Create pages
+    // Create placeholder pages with spinners
     for (let i = 1; i < totalPages; i++) {
       if (i > 1) {
         flipbook.append(`
           <div class="page" data-index="${i}">
-            <div class="page-loader"><div class="spinner"></div></div>
+            <div class="page-loader">
+              <div class="spinner"></div>
+            </div>
           </div>
         `);
       }
@@ -304,7 +242,7 @@
       }
     }
 
-    // Preload nearby pages
+    // Preload adjacent pages for smoother flipping
     function preloadNearby(page) {
       [page - 1, page + 1, page + 2].forEach(p => {
         if (p > 1 && p < totalPages) loadPage(p);
@@ -317,7 +255,7 @@
       height: 520,
       autoCenter: true,
       display: getDisplayMode(),
-      page: 2,
+      page: 2, // start on the second page
       duration: 800,
       gradients: true,
       when: {
@@ -333,21 +271,22 @@
       }
     });
 
-    // Build thumbnails
+    // ✅ Build thumbnails first
     for (let i = 0; i < 18; i++) {
       $('#thumbnails').append(
         `<img src="${baseURL}page_${String(i).padStart(3,'0')}.webp" loading="lazy" decoding="async">`
       );
     }
 
+    // ✅ Highlight the second thumbnail as active on load
     $('#thumbnails img').eq(1).addClass('active');
+
+    // Initial load
     loadPage(2);
     preloadNearby(2);
 
     // Navigation
-    $(window).on('resize orientationchange', () => {
-      flipbook.turn('display', getDisplayMode());
-    });
+    $(window).resize(() => flipbook.turn('display', getDisplayMode()));
     $('#next').click(() => flipbook.turn('next'));
     $('#prev').click(() => flipbook.turn('previous'));
 
